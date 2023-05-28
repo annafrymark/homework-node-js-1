@@ -1,24 +1,47 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
+// const { table } = require("console");
 
-/*
- * Skomentuj i zapisz wartość
- * const contactsPath = ;
- */
+// const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.resolve("./db/contacts.json");
+const { nanoid } = require("nanoid");
 
-// TODO: udokumentuj każdą funkcję
-function listContacts() {
-  // ...twój kod
+async function listContacts() {
+  try {
+    const contacts = await fs.readFile(contactsPath);
+    return console.table(JSON.parse(contacts));
+  } catch (error) {
+    return console.log(error);
+  }
 }
 
-function getContactById(contactId) {
-  // ...twój kod
+async function getContactById(contactId) {
+  try {
+    const contacts = await listContacts();
+    const contact = contacts.find((contact) => contact.id === contactId);
+    console.log(contact);
+    return contact;
+  } catch (error) {
+    return console.log(error);
+  }
 }
 
-function removeContact(contactId) {
-  // ...twój kod
+async function removeContact(contactId) {
+  const contacts = await listContacts();
+  const filtredContacts = contacts.filter(contact => contact.id !== contactId);
+  console.table(filtredContacts);
+  fs.writeFile(contactsPath, JSON.stringify(filtredContacts));
 }
 
-function addContact(name, email, phone) {
-  // ...twój kod
+async function addContact(name, email, phone) {
+  const id = nanoid();
+  const newContact = { id, name, email, phone };
+  console.log(newContact);
+  const contacts = await listContacts();
+  contacts.push(newContact);
+  console.table(contacts);
+  fs.writeFile(contactsPath, JSON.stringify(contacts));
 }
+
+//Zrób eksport utworzonych funkcji przez module.exports
+module.exports = { listContacts, getContactById, removeContact, addContact };
