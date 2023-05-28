@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 const path = require("path");
 // const { table } = require("console");
 
-// const contactsPath = path.join(__dirname, "db", "contacts.json");
+//const contactsPath = path.join(__dirname, "db", "contacts.json");
 const contactsPath = path.resolve("./db/contacts.json");
 const { nanoid } = require("nanoid");
 
@@ -45,3 +45,5 @@ async function addContact(name, email, phone) {
 
 //Zrób eksport utworzonych funkcji przez module.exports
 module.exports = { listContacts, getContactById, removeContact, addContact };
+
+//export { listContacts, getContactById, removeContact, addContact };
