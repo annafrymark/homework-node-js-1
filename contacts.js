@@ -1,6 +1,5 @@
 const fs = require("fs").promises;
 const path = require("path");
-// const { table } = require("console");
 
 //const contactsPath = path.join(__dirname, "db", "contacts.json");
 const contactsPath = path.resolve("./db/contacts.json");
@@ -17,10 +16,8 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   try {
-    //const contacts = await listContacts();
     const contacts = await fs.readFile(contactsPath);
     const parsedContacts = JSON.parse(contacts);
-    //console.log(parsedContacts);
     const contactFound = parsedContacts.find(
       (contact) => contact.id === contactId
     );
@@ -32,7 +29,6 @@ async function getContactById(contactId) {
 
 async function removeContact(contactId) {
   try {
-    // const contacts = await listContacts();
     const contacts = await fs.readFile(contactsPath);
     const parsedContacts = JSON.parse(contacts);
     const filtredContacts = parsedContacts.filter(
@@ -51,7 +47,6 @@ async function addContact(name, email, phone) {
     const id = nanoid();
     const newContact = { id, name, email, phone };
 
-    //const contacts = await listContacts();
     const contacts = await fs.readFile(contactsPath);
     const parsedContacts = JSON.parse(contacts);
     parsedContacts.push(newContact);
@@ -63,7 +58,7 @@ async function addContact(name, email, phone) {
   }
 }
 
-//Zrób eksport utworzonych funkcji przez module.exports
+
 module.exports = { listContacts, getContactById, removeContact, addContact };
 
-//export { listContacts, getContactById, removeContact, addContact };
+
