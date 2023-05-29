@@ -9,38 +9,58 @@ const { nanoid } = require("nanoid");
 async function listContacts() {
   try {
     const contacts = await fs.readFile(contactsPath);
-    return console.table(JSON.parse(contacts));
+    console.table(JSON.parse(contacts));
   } catch (error) {
-    return console.log(error);
+    console.log(error);
   }
 }
 
 async function getContactById(contactId) {
   try {
-    const contacts = await listContacts();
-    const contact = contacts.find((contact) => contact.id === contactId);
-    console.log(contact);
-    return contact;
+    //const contacts = await listContacts();
+    const contacts = await fs.readFile(contactsPath);
+    const parsedContacts = JSON.parse(contacts);
+    //console.log(parsedContacts);
+    const contactFound = parsedContacts.find(
+      (contact) => contact.id === contactId
+    );
+    console.table(contactFound);
   } catch (error) {
-    return console.log(error);
+    console.log(error);
   }
 }
 
 async function removeContact(contactId) {
-  const contacts = await listContacts();
-  const filtredContacts = contacts.filter(contact => contact.id !== contactId);
-  console.table(filtredContacts);
-  fs.writeFile(contactsPath, JSON.stringify(filtredContacts));
+  try {
+    // const contacts = await listContacts();
+    const contacts = await fs.readFile(contactsPath);
+    const parsedContacts = JSON.parse(contacts);
+    const filtredContacts = parsedContacts.filter(
+      (contact) => contact.id !== contactId
+    );
+    console.table(filtredContacts);
+    fs.writeFile(contactsPath, JSON.stringify(filtredContacts));
+    console.log("Contact deleted");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function addContact(name, email, phone) {
-  const id = nanoid();
-  const newContact = { id, name, email, phone };
-  console.log(newContact);
-  const contacts = await listContacts();
-  contacts.push(newContact);
-  console.table(contacts);
-  fs.writeFile(contactsPath, JSON.stringify(contacts));
+  try {
+    const id = nanoid();
+    const newContact = { id, name, email, phone };
+
+    //const contacts = await listContacts();
+    const contacts = await fs.readFile(contactsPath);
+    const parsedContacts = JSON.parse(contacts);
+    parsedContacts.push(newContact);
+    console.table(parsedContacts);
+    fs.writeFile(contactsPath, JSON.stringify(parsedContacts));
+    console.log(`Contact '${name}' added`);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 //Zrób eksport utworzonych funkcji przez module.exports
